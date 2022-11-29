@@ -1,9 +1,9 @@
-import { Fragment } from 'react';
-import * as d3 from 'd3';
+import { Fragment } from "react";
+import * as d3 from "d3";
 
-import Rankings from './Rankings';
-import ScatterplotReactControlled from './ScatterplotReactControlled';
-import BarChart from './BarChart';
+import Rankings from "./Rankings";
+import ScatterplotReactControlled from "./ScatterplotReactControlled";
+import BarChart from "./BarChart";
 
 const Charts = props => {
   const margin = {top: 30, right: 10, bottom: 50, left: 60};
@@ -15,24 +15,24 @@ const Charts = props => {
   return (
     <Fragment>
       <h1>Front-end Frameworks</h1>
-      <div className='row'>
-        <div className='col-12 col-lg-9'>
+      <div className="row">
+        <div className="col-12 col-lg-9">
           <Rankings 
             margin={margin} 
             data={props.data}
             colorScale={colorScale}
           />
         </div>
-        <div className='col-12 col-lg-3'>
-          <div className='row'>
-            <div className='col-12 col-md-6 col-lg-12'>
+        <div className="col-12 col-lg-3">
+          <div className="row">
+            <div className="col-12 col-md-6 col-lg-12">
               <ScatterplotReactControlled 
                 margin={margin}
                 data={props.data.experience}
                 colorScale={colorScale}
               />
             </div>
-            <div className='col-12 col-md-6 col-lg-12'>
+            <div className="col-12 col-md-6 col-lg-12">
               <BarChart 
                 data={props.data.experience} 
                 margin={margin} 

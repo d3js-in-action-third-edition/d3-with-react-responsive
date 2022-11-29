@@ -1,4 +1,4 @@
-import { useState, Fragment } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import * as d3 from "d3";
 
 import RankingFilters from '../Interactions/RankingFilters';
@@ -15,8 +15,15 @@ const rankingFilters = [
   { id: "awareness", label: "Awareness" },
 ];
 
+
+const getWindowWidth = () => {
+  const windowWidth = window.innerWidth;
+  return windowWidth;
+};
+
 const Rankings = props => {
   const [activeFilter, setActiveFilter] = useState("satisfaction");
+  const [windowWidth, setWindowWidth] = useState(getWindowWidth());
 
   const width = 1000;
   const height = 542;
@@ -31,12 +38,28 @@ const Rankings = props => {
   const yScale = d3.scalePoint()
     .domain(d3.range(1, props.data.ids.length + 1))
     .range([0, innerHeight]);
+  const fontScale = d3.scaleLinear()
+    .domain([500, 1000])
+    .range([30, 16])
+    .clamp([true]);
 
   const filterSelectionHandler = (id) => {
     if (activeFilter !== id) {
       setActiveFilter(id);
     }
   };
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setWindowWidth(getWindowWidth());
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
 
   return (
     <Card>
@@ -68,6 +91,7 @@ const Rankings = props => {
               x={0}
               y={innerHeight + 40}
               textAnchor="middle"
+              style={{ fontSize: `${fontScale(windowWidth)}px` }}
             >
               {year}
             </text>

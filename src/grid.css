@@ -52,3 +52,12 @@
     max-width: 25%;
   }
 }
+
+/* Small charts */
+.small-chart-container {
+  display: flex;
+  justify-content: center;
+}
+.small-chart-container svg {
+  max-width: 300px;
+}
