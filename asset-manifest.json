@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/d3-with-react-responsive/static/css/main.12d1f601.css",
+    "main.js": "/d3-with-react-responsive/static/js/main.8614edca.js",
+    "index.html": "/d3-with-react-responsive/index.html",
+    "main.12d1f601.css.map": "/d3-with-react-responsive/static/css/main.12d1f601.css.map",
+    "main.8614edca.js.map": "/d3-with-react-responsive/static/js/main.8614edca.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.12d1f601.css",
+    "static/js/main.8614edca.js"
+  ]
+}
