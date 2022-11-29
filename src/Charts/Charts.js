@@ -12,7 +12,21 @@ const getWindowWidth = () => {
   return windowWidth;
 };
 
+const rankingFilters = [
+  { id: "satisfaction", label: "Satisfaction" },
+  { id: "interest", label: "Interest" },
+  { id: "usage", label: "Usage" },
+  { id: "awareness", label: "Awareness" },
+];
+
 const Charts = props => {
+  const [activeFilter, setActiveFilter] = useState("satisfaction");
+  const filterSelectionHandler = (id) => {
+    if (activeFilter !== id) {
+      setActiveFilter(id);
+    }
+  };
+
   const margin = {top: 30, right: 10, bottom: 50, left: 60};
   const breakPoint = 600;
 
@@ -43,11 +57,17 @@ const Charts = props => {
                 margin={margin} 
                 data={props.data}
                 colorScale={colorScale}
+                rankingFilters={rankingFilters}
+                activeFilter={activeFilter}
+                onFilterSelection={filterSelectionHandler}
               />
             : <RankingsMobile
                 margin={margin} 
                 data={props.data}
                 colorScale={colorScale}
+                rankingFilters={rankingFilters}
+                activeFilter={activeFilter}
+                onFilterSelection={filterSelectionHandler}
               />
           }
         </div>

@@ -8,21 +8,12 @@ import Curve from '../ChartComponents/Curve';
 import Label from '../ChartComponents/Label';
 import Badge from '../UI/Badge';
 
-const rankingFilters = [
-  { id: "satisfaction", label: "Satisfaction" },
-  { id: "interest", label: "Interest" },
-  { id: "usage", label: "Usage" },
-  { id: "awareness", label: "Awareness" },
-];
-
-
 const getWindowWidth = () => {
   const windowWidth = window.innerWidth;
   return windowWidth;
 };
 
 const Rankings = props => {
-  const [activeFilter, setActiveFilter] = useState("satisfaction");
   const [windowWidth, setWindowWidth] = useState(getWindowWidth());
 
   const width = 1000;
@@ -43,12 +34,6 @@ const Rankings = props => {
     .range([30, 16])
     .clamp([true]);
 
-  const filterSelectionHandler = (id) => {
-    if (activeFilter !== id) {
-      setActiveFilter(id);
-    }
-  };
-
   useEffect(() => {
     const handleWindowResize = () => {
       setWindowWidth(getWindowWidth());
@@ -65,9 +50,9 @@ const Rankings = props => {
     <Card>
       <h2>Rankings</h2>
       <RankingFilters
-        filters={rankingFilters}
-        activeFilter={activeFilter}
-        onFilterSelection={filterSelectionHandler}
+        filters={props.rankingFilters}
+        activeFilter={props.activeFilter}
+        onFilterSelection={props.onFilterSelection}
       />
       <ChartContainer
         width={width}
@@ -100,7 +85,7 @@ const Rankings = props => {
         {props.data.experience.map((framework, i) => (
           <g key={`curve-${framework.id}`}>
             <Curve
-              data={framework[activeFilter]}
+              data={framework[props.activeFilter]}
               xScale={xScale}
               yScale={yScale}
               xAccessor="year"
@@ -108,10 +93,10 @@ const Rankings = props => {
               stroke={props.colorScale(framework.id)}
               strokeWidth={5}
             />
-            {framework[activeFilter][0].rank &&
+            {framework[props.activeFilter][0].rank &&
               <Label
                 x={-25}
-                y={yScale(framework[activeFilter][0].rank)}
+                y={yScale(framework[props.activeFilter][0].rank)}
                 color={props.colorScale(framework.id)}
                 label={framework.name}
                 textAnchor={"end"}
@@ -119,12 +104,12 @@ const Rankings = props => {
             }
             <Label
               x={innerWidth + 25}
-              y={yScale(framework[activeFilter][framework[activeFilter].length - 1].rank)}
+              y={yScale(framework[props.activeFilter][framework[props.activeFilter].length - 1].rank)}
               color={props.colorScale(framework.id)}
               label={framework.name}
               textAnchor={"start"}
             />
-            {framework[activeFilter].map((selection, i) => (
+            {framework[props.activeFilter].map((selection, i) => (
               <Fragment key={`${framework.id}-selection-${i}`}>
                 {selection.rank &&
                   <Badge

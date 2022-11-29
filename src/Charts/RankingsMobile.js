@@ -1,15 +1,14 @@
-import { useState, Fragment } from "react";
+import { Fragment } from "react";
 import * as d3 from "d3";
 
 import Card from "../UI/Card";
 import ChartContainer from "../ChartComponents/ChartContainer";
+import RankingFilters from "../Interactions/RankingFilters";
 import Curve from "../ChartComponents/Curve";
 import Label from "../ChartComponents/Label";
 import Badge from "../UI/Badge";
 
 const RankingsMobile = props => {
-  const [activeFilter, setActiveFilter] = useState("satisfaction");
-
   const width = 300;
   const height = 550;
   const marginRight = 120;
@@ -40,7 +39,11 @@ const RankingsMobile = props => {
   return (
     <Card>
       <h2>Rankings</h2>
-      <div>filter</div>
+      <RankingFilters
+        filters={props.rankingFilters}
+        activeFilter={props.activeFilter}
+        onFilterSelection={props.onFilterSelection}
+      />
       <ChartContainer
         width={width}
         height={height}
@@ -71,7 +74,7 @@ const RankingsMobile = props => {
         {mobileData.map((framework, i) => (
           <g key={`curve-${framework.id}`}>
             <Curve
-              data={framework[activeFilter]}
+              data={framework[props.activeFilter]}
               xScale={xScale}
               yScale={yScale}
               xAccessor="year"
@@ -81,7 +84,7 @@ const RankingsMobile = props => {
             />
             <Label
               x={innerWidth + 30}
-              y={yScale(framework[activeFilter][framework[activeFilter].length - 1].rank)}
+              y={yScale(framework[props.activeFilter][framework[props.activeFilter].length - 1].rank)}
               color={props.colorScale(framework.id)}
               label={framework.name}
               textAnchor={"start"}
@@ -90,7 +93,7 @@ const RankingsMobile = props => {
         ))}
         {mobileData.map((framework, i) => (
           <g key={`bages-${framework.id}`}>
-            {framework[activeFilter].map((selection, i) => (
+            {framework[props.activeFilter].map((selection, i) => (
               <Fragment key={`${framework.id}-selection-${i}`}>
                 {selection.rank &&
                   <Badge
