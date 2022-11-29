@@ -1,16 +1,36 @@
-import { Fragment } from "react";
+import { Fragment, useState, useEffect } from "react";
 import * as d3 from "d3";
 
 import Rankings from "./Rankings";
 import ScatterplotReactControlled from "./ScatterplotReactControlled";
-import BarChart from "./BarChart";
+import BarChartVertical from "./BarChartVertical";
+import BarChartHorizontal from "./BarChartHorizontal";
+
+const getWindowWidth = () => {
+  const windowWidth = window.innerWidth;
+  return windowWidth;
+};
 
 const Charts = props => {
   const margin = {top: 30, right: 10, bottom: 50, left: 60};
+  const breakPoint = 600;
 
   const colorScale = d3.scaleOrdinal()
     .domain(props.data.ids)
     .range(d3.schemeTableau10);
+
+  const [windowWidth, setWindowWidth] = useState(getWindowWidth());
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setWindowWidth(getWindowWidth());
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
 
   return (
     <Fragment>
@@ -33,11 +53,18 @@ const Charts = props => {
               />
             </div>
             <div className="col-12 col-md-6 col-lg-12">
-              <BarChart 
-                data={props.data.experience} 
-                margin={margin} 
-                colorScale={colorScale}
-              />
+              {windowWidth >= breakPoint
+                ? <BarChartVertical
+                    data={props.data.experience} 
+                    margin={margin} 
+                    colorScale={colorScale}
+                  />
+                : <BarChartHorizontal
+                    data={props.data.experience} 
+                    margin={margin} 
+                    colorScale={colorScale}
+                  />
+              }
             </div>
           </div>
         </div>
