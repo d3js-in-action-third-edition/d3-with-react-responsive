@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import * as d3 from "d3";
 
 import Card from '../UI/Card';
@@ -14,33 +14,33 @@ const getWindowWidth = () => {
 const BarChart = props => {
   const breakPoint = 600;
   const width = 300;
-  let windowWidth = getWindowWidth();
 
   const getHeight = (width) => {
     return width >= breakPoint ? 245 : 400;
   };
-  const getMarginBottom = (width) => {
+  const getMarginBottom = useCallback((width) => {
     return width >= breakPoint ? 85 : props.margin.bottom;
-  };
-  const getMarginRight = (width) => {
+  }, [props.margin.bottom]);
+  const getMarginRight = useCallback((width) => {
     return width >= breakPoint ? props.margin.right : 30;
-  };
-  const getMarginLeft = (width) => {
+  }, [props.margin.right]);
+  const getMarginLeft = useCallback((width) => {
     return width >= breakPoint ? props.margin.left : 90;
-  };
-  const getInnerWidth = (mR, mL) => {
+  }, [props.margin.left]);
+  const getInnerWidth = useCallback((mR, mL) => {
     return width - mR - mL;
-  };
-  const getInnerHeight = (h, m) => {
+  }, []);
+  const getInnerHeight = useCallback((h, m) => {
     return h - props.margin.top - m;
-  };
+  }, [props.margin.top]);
   const getLayout = (width) => {
     return width >= breakPoint ? "vertical" : "horizontal";
   };
 
-  let marginBottom = getMarginBottom(windowWidth);
-  let marginRight = getMarginRight(windowWidth);
-  let marginLeft = getMarginLeft(windowWidth);
+  const [windowWidth, setWindowWidth] = useState(getWindowWidth);
+  const [marginBottom, setMarginBottom] = useState(getMarginBottom(windowWidth));
+  const [marginRight, setMarginRight] = useState(getMarginRight(windowWidth));
+  const [marginLeft, setMarginLeft] = useState(getMarginLeft(windowWidth));
   const [height, setHeight] = useState(getHeight(windowWidth));
   const [innerWidth, setInnerWidth] = useState(getInnerWidth(marginRight, marginLeft));
   const [innerHeight, setInnerHeight] = useState(getInnerHeight(height, marginBottom));
@@ -52,18 +52,20 @@ const BarChart = props => {
       if ((newWindowWidth >= breakPoint && windowWidth < breakPoint) ||
            (newWindowWidth < breakPoint && windowWidth >= breakPoint)) {
         const newHeight = getHeight(newWindowWidth);
-        marginBottom = getMarginBottom(newWindowWidth);
-        marginRight = getMarginRight(newWindowWidth);
-        marginLeft = getMarginLeft(newWindowWidth);
-        const newInnerWidth = getInnerWidth(marginRight, marginLeft);
-        const newInnerHeight = getInnerHeight(newHeight, marginBottom);
+        const newMarginBottom = getMarginBottom(newWindowWidth);
+        const newMarginRight = getMarginRight(newWindowWidth);
+        const newMarginLeft = getMarginLeft(newWindowWidth);
+        const newInnerWidth = getInnerWidth(newMarginRight, newMarginLeft);
+        const newInnerHeight = getInnerHeight(newHeight, newMarginBottom);
+        setWindowWidth(newWindowWidth);
+        setMarginBottom(newMarginBottom);
+        setMarginRight(newMarginRight);
+        setMarginLeft(newMarginLeft);
         setHeight(newHeight);
         setInnerWidth(newInnerWidth);
         setInnerHeight(newInnerHeight);
         setLayout(getLayout(newWindowWidth));
       }
-      windowWidth = newWindowWidth;
-      
     };
 
     window.addEventListener('resize', handleWindowResize);
@@ -71,7 +73,7 @@ const BarChart = props => {
     return () => {
       window.removeEventListener('resize', handleWindowResize);
     };
-  }, []);
+  }, [getInnerHeight, getInnerWidth, getMarginBottom, getMarginLeft, getMarginRight, windowWidth]);
 
   const awarenessData = [];
   props.data.forEach(d => {
@@ -106,7 +108,7 @@ const BarChart = props => {
         <ChartContainer
           width={width}
           height={height}
-          margin={{ top: props.margin.top, right: props.margin.right, bottom: marginBottom, left: marginLeft }}
+          margin={{ top: props.margin.top, right: marginRight, bottom: marginBottom, left: marginLeft }}
         >
           {layout === "vertical"
             ? <BarChartVertical
