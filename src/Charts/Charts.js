@@ -2,6 +2,7 @@ import { Fragment, useState, useEffect } from "react";
 import * as d3 from "d3";
 
 import Rankings from "./Rankings";
+import RankingsMobile from "./RankingsMobile";
 import ScatterplotReactControlled from "./ScatterplotReactControlled";
 import BarChartVertical from "./BarChartVertical";
 import BarChartHorizontal from "./BarChartHorizontal";
@@ -37,11 +38,18 @@ const Charts = props => {
       <h1>Front-end Frameworks</h1>
       <div className="row">
         <div className="col-12 col-lg-9">
-          <Rankings 
-            margin={margin} 
-            data={props.data}
-            colorScale={colorScale}
-          />
+          {windowWidth >= breakPoint
+            ? <Rankings 
+                margin={margin} 
+                data={props.data}
+                colorScale={colorScale}
+              />
+            : <RankingsMobile
+                margin={margin} 
+                data={props.data}
+                colorScale={colorScale}
+              />
+          }
         </div>
         <div className="col-12 col-lg-3">
           <div className="row">

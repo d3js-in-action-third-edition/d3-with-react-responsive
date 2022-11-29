@@ -8,8 +8,8 @@ import Rectangle from "../ChartComponents/Rectangle";
 const BarChartHorizontal = props => {
   const width = 300;
   const height = 400;
-  const marginRight = 30;
-  const marginLeft = 90;
+  const marginRight = 38;
+  const marginLeft = 95;
   const innerWidth = width - marginLeft - marginRight;
   const innerHeight = height - props.margin.top - props.margin.bottom;
 
@@ -64,6 +64,7 @@ const BarChartHorizontal = props => {
                 x={xScale(framework.awareness_percentage) + 5}
                 y={yScale(framework.name) + yScale.bandwidth()/2}
                 alignmentBaseline="middle"
+                style={{ fontSize: "13px" }}
               >
                 {`${Math.round(framework.awareness_percentage)}%`}
               </text>
