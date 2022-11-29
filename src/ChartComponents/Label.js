@@ -2,9 +2,11 @@ import "./Label.css";
 
 const Label = props => {
   return (
-    <g style={{ transform: `translate(${props.x}px, ${props.y}px)` }}>
+    <g 
+      className="label"
+      style={{ transform: `translate(${props.x}px, ${props.y}px)` }}
+    >
       <text
-        className="label"
         x={0}
         y={0}
         fill={props.color}
