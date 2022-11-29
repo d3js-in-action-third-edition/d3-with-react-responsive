@@ -55,8 +55,7 @@
 
 /* Small charts */
 .small-chart-container {
-  display: flex;
-  justify-content: center;
+  text-align: center;
 }
 .small-chart-container svg {
   max-width: 300px;

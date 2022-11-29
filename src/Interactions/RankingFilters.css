@@ -6,9 +6,11 @@
 }
 
 .button {
+  margin: 0;
   padding: 8px 6px;
   font-family: 'IBM Plex Mono', monospace;
   font-size: 1.1rem;
+  color: #06273b;
   background-color: transparent;
   border: 1px dashed #06273b;
   border-left: none;
