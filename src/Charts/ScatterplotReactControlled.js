@@ -21,37 +21,35 @@ const ScatterplotReactControlled = props => {
   return (
     <Card>
       <h2>Retention vs Usage</h2>
-      <div className="small-chart-container">
-        <ChartContainer
-          width={width}
-          height={height}
-          margin={props.margin}
-        >
-          <Axis 
-            type="bottom"
-            scale={xScale}
-            innerWidth={innerWidth}
-            innerHeight={innerHeight}
-            label={"User Count"}
+      <ChartContainer
+        width={width}
+        height={height}
+        margin={props.margin}
+      >
+        <Axis 
+          type="bottom"
+          scale={xScale}
+          innerWidth={innerWidth}
+          innerHeight={innerHeight}
+          label={"User Count"}
+        />
+        <Axis 
+          type="left"
+          scale={yScale}
+          innerWidth={innerWidth}
+          innerHeight={innerHeight}
+          label={"Retention %"}
+        />
+        {props.data.map(framework => (
+          <Circle 
+            key={`circle-${framework.id}`}
+            cx={xScale(framework.user_count)}
+            cy={yScale(framework.retention_percentage)}
+            r={6}
+            fill={props.colorScale(framework.id)}
           />
-          <Axis 
-            type="left"
-            scale={yScale}
-            innerWidth={innerWidth}
-            innerHeight={innerHeight}
-            label={"Retention %"}
-          />
-          {props.data.map(framework => (
-            <Circle 
-              key={`circle-${framework.id}`}
-              cx={xScale(framework.user_count)}
-              cy={yScale(framework.retention_percentage)}
-              r={6}
-              fill={props.colorScale(framework.id)}
-            />
-          ))}
-        </ChartContainer> 
-      </div>
+        ))}
+      </ChartContainer> 
     </Card>
   )
 };

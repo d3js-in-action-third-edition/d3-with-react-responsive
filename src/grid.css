@@ -12,21 +12,24 @@
   margin-left: -10px;
   margin-right: -10px;
 }
-.col,
-[class^="col-"],
-[class*=" col-"] {
+[class^="col-"] {
   position: relative;
   width: 100%;
   min-height: 1px;
   padding-right: 10px;
   padding-left: 10px;
-  flex-basis: 0;
-  flex-grow: 1;
-  max-width: 100%;
 }
 .col-12 {
   flex: 0 0 100%;
   max-width: 100%;
+}
+.col-9 {
+  flex: 0 0 75%;
+  max-width: 75%;
+}
+.col-3 {
+  flex: 0 0 25%;
+  max-width: 25%;
 }
 
 /* Medium layout */
@@ -51,12 +54,4 @@
     flex: 0 0 25%;
     max-width: 25%;
   }
-}
-
-/* Small charts */
-.small-chart-container {
-  text-align: center;
-}
-.small-chart-container svg {
-  max-width: 300px;
 }

@@ -1,15 +1,16 @@
-import { Fragment, useState, useEffect } from "react";
-import * as d3 from "d3";
+import { Fragment, useState, useEffect } from 'react';
+import * as d3 from 'd3';
 
-import Rankings from "./Rankings";
-import RankingsMobile from "./RankingsMobile";
-import ScatterplotReactControlled from "./ScatterplotReactControlled";
-import BarChartVertical from "./BarChartVertical";
-import BarChartHorizontal from "./BarChartHorizontal";
+import Rankings from './Rankings';
+import RankingsMobile from './RankingsMobile';
+import ScatterplotReactControlled from './ScatterplotReactControlled';
+import BarChart from './BarChart';
+import BarChartMobile from './BarChartMobile';
 
-const getWindowWidth = () => {
-  const windowWidth = window.innerWidth;
-  return windowWidth;
+const breakPoint = 600;
+const getLayout = () => {
+  const layout = window.innerWidth >= breakPoint ? "desktop" : "mobile";
+  return layout;
 };
 
 const rankingFilters = [
@@ -20,24 +21,17 @@ const rankingFilters = [
 ];
 
 const Charts = props => {
-  const [activeFilter, setActiveFilter] = useState("satisfaction");
-  const filterSelectionHandler = (id) => {
-    if (activeFilter !== id) {
-      setActiveFilter(id);
-    }
-  };
+  const [layout, setLayout] = useState(getLayout());
 
   const margin = {top: 30, right: 10, bottom: 50, left: 60};
-  const breakPoint = 600;
 
-  const colorScale = d3.scaleOrdinal()
-    .domain(props.data.ids)
-    .range(d3.schemeTableau10);
-
-  const [windowWidth, setWindowWidth] = useState(getWindowWidth());
   useEffect(() => {
     const handleWindowResize = () => {
-      setWindowWidth(getWindowWidth());
+      const windowWidth = window.innerWidth;
+      if ((windowWidth >= breakPoint && layout === "mobile") ||
+          (windowWidth < breakPoint && layout === "desktop")) {
+        setLayout(getLayout());
+      }
     };
 
     window.addEventListener('resize', handleWindowResize);
@@ -45,14 +39,25 @@ const Charts = props => {
     return () => {
       window.removeEventListener('resize', handleWindowResize);
     };
-  }, []);
+  }, [layout]);
+
+  const colorScale = d3.scaleOrdinal()
+    .domain(props.data.ids)
+    .range(d3.schemeTableau10);
+  
+  const [activeFilter, setActiveFilter] = useState("satisfaction");
+  const filterSelectionHandler = (id) => {
+    if (activeFilter !== id) {
+      setActiveFilter(id);
+    }
+  };
 
   return (
     <Fragment>
       <h1>Front-end Frameworks</h1>
-      <div className="row">
-        <div className="col-12 col-lg-9">
-          {windowWidth >= breakPoint
+      <div className='row'>
+        <div className='col-12 col-lg-9'>
+          {layout === "desktop"
             ? <Rankings 
                 margin={margin} 
                 data={props.data}
@@ -71,23 +76,23 @@ const Charts = props => {
               />
           }
         </div>
-        <div className="col-12 col-lg-3">
-          <div className="row">
-            <div className="col-12 col-md-6 col-lg-12">
+        <div className='col-12 col-lg-3'>
+          <div className='row'>
+            <div className='col-12 col-md-6 col-lg-12'>
               <ScatterplotReactControlled 
                 margin={margin}
                 data={props.data.experience}
                 colorScale={colorScale}
               />
             </div>
-            <div className="col-12 col-md-6 col-lg-12">
-              {windowWidth >= breakPoint
-                ? <BarChartVertical
+            <div className='col-12 col-md-6 col-lg-12'>
+              {layout === "desktop"
+                ? <BarChart 
                     data={props.data.experience} 
                     margin={margin} 
                     colorScale={colorScale}
                   />
-                : <BarChartHorizontal
+                : <BarChartMobile 
                     data={props.data.experience} 
                     margin={margin} 
                     colorScale={colorScale}
